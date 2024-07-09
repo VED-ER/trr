@@ -1,5 +1,6 @@
 NOTES:
 
+- The only resource used are offical docs
 - Focus of this project was on implementing google ml for text recognition from an image
 - The goal was to write a custom native module that does the recognition on device (rather than sending an image to cloud for processing)
 - The app works by using a camera and taking an image and then reading text from it, or picking an image from file system and then reading it
