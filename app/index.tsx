@@ -6,21 +6,25 @@ import {
     ScrollView,
     StyleSheet,
     Text,
-    View,
 } from "react-native"
 import * as ImagePicker from "expo-image-picker"
 import { Link, useLocalSearchParams } from "expo-router"
+import { recognizeImage } from "@/mlkit"
 
 export default function Index() {
     const { uri } = useLocalSearchParams()
 
     const [image, setImage] = useState<null | string>(null)
-    const [result, setResult] = useState()
+    const [result, setResult] = useState("")
 
     useEffect(() => {
+        const convert = async (uri: string) => {
+            const r = await recognizeImage(uri)
+            setResult(r)
+        }
         if (uri) {
             setImage(uri as string)
-            // convertImgFileToText(uri as string)
+            convert(uri as string)
         }
     }, [uri])
 
@@ -34,20 +38,14 @@ export default function Index() {
 
         if (!result.canceled) {
             setImage(result.assets[0].uri)
-            const r = await recognizeTextFromImage(result.assets[0].uri)
-            console.log(r)
+            const r = await recognizeImage(result.assets[0].uri)
+            setResult(r)
         }
     }
-
-    const recognizeTextFromImage = async (uri: string) => {}
-
-    const imgToText = () => {
-        console.log("img to text")
-    }
-
     return (
         <>
             <ScrollView contentContainerStyle={styles.container}>
+                <Button title="TEST" onPress={() => recognizeImage("asdasd")} />
                 <Button
                     title="Pick an image from camera roll"
                     onPress={pickImage}
